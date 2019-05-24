@@ -1,0 +1,41 @@
+version: '2.4'
+services:
+  data-exploration:
+    image: tensorflow/tensorflow:1.13.1-py3-jupyter
+    init: true
+
+    ports:
+      - 8888:8888 
+      - 6006:6006
+
+    volumes:
+      - ./data:/data
+      - ./notebooks:/notebooks
+      - ./kmnist:/code
+      - ./models:/models
+
+    working_dir: /notebooks
+
+    command: jupyter notebook --no-browser --allow-root --ip 0.0.0.0 --NotebookApp.custom_display_url=http://localhost:8888
+
+  train:
+    image: tensorflow/tensorflow:1.13.1-py3-jupyter
+    init: true
+
+    ports:
+      - 8888:8888 
+      - 6006:6006
+
+    volumes:
+      - ./data:/data
+      - ./notebooks:/notebooks
+      - ./kmnist:/code
+      - ./models:/models
+
+    working_dir: /code
+
+    stdin_open: true
+    tty: true
+
+    command: python kmnist_main.py
+
